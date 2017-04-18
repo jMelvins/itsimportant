@@ -1,14 +1,18 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11134" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12118" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11106"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="itsImportant" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -16,11 +20,44 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="3Uc-Md-zWi">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="2HM-Jj-FG1"/>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="P3j-GY-kaT"/>
+                                </connections>
+                            </tableView>
+                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="6uS-BB-896">
+                                <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                                <color key="barTintColor" red="0.58390413903435856" green="0.72735055719724273" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="exo-dd-Jmt"/>
+                                </connections>
+                            </searchBar>
+                        </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="3Uc-Md-zWi" firstAttribute="top" secondItem="6uS-BB-896" secondAttribute="bottom" id="Kii-Ty-1zY"/>
+                            <constraint firstAttribute="trailing" secondItem="6uS-BB-896" secondAttribute="trailing" id="NXc-QY-rrP"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="3Uc-Md-zWi" secondAttribute="bottom" id="RH4-p2-7RT"/>
+                            <constraint firstItem="6uS-BB-896" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="RRR-qQ-Pdb"/>
+                            <constraint firstItem="3Uc-Md-zWi" firstAttribute="top" secondItem="6uS-BB-896" secondAttribute="bottom" id="YDA-J1-29u"/>
+                            <constraint firstItem="3Uc-Md-zWi" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="YPC-TV-kLM"/>
+                            <constraint firstAttribute="trailing" secondItem="3Uc-Md-zWi" secondAttribute="trailing" id="vhb-0x-k2M"/>
+                            <constraint firstItem="6uS-BB-896" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="vtR-RM-Yoj"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="searchBar" destination="6uS-BB-896" id="ZDL-d9-3eu"/>
+                        <outlet property="tableView" destination="3Uc-Md-zWi" id="UDP-mA-CbQ"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="116" y="122.78860569715144"/>
         </scene>
     </scenes>
 </document>
