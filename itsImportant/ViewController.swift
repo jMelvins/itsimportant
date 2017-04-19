@@ -85,6 +85,11 @@ extension ViewController: UISearchBarDelegate {
             
             let asd = Int(searchBar.text!)
             
+            if asd == 0{
+                tableView.scrollToRow(at: [0 , 0], at: .middle, animated: true)
+                return
+            }
+            
             if asd == nil{
                 
                 let alertController = UIAlertController(title: "Not a digital value", message: "You entered not a digital value. Try again.", preferredStyle: .alert)
