@@ -85,7 +85,7 @@ extension ViewController: UISearchBarDelegate {
             
             let asd = Int(searchBar.text!)
             
-            if asd == 0{
+            if asd! <= 0{
                 tableView.scrollToRow(at: [0 , 0], at: .middle, animated: true)
                 return
             }
