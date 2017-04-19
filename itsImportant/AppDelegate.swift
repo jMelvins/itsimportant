@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let barTintColor = UIColor(red: 20/255, green: 180/255, blue: 160/255,
                                    alpha: 1)
         UISearchBar.appearance().barTintColor = barTintColor
-        window!.tintColor = UIColor(red: 10/255, green: 80/255, blue: 80/255,
+        window!.tintColor = UIColor(red: 1/255, green: 1/255, blue: 1/255,
                                     alpha: 1)
     }
     

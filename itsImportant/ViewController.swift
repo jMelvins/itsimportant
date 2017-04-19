@@ -44,6 +44,7 @@ class ViewController: UIViewController {
         tableView.dataSource = self
         searchBar.delegate = self
         
+        
         arrayOfNumbers = [
             SearchResult(indexOfNumber: "1", number: "1"),
             SearchResult(indexOfNumber: "2", number: "1")
@@ -79,14 +80,39 @@ extension ViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
         searchBar.resignFirstResponder()
+    
         if !searchBar.text!.isEmpty {
-            tableView.scrollToRow(at: IndexPath(row: Int(searchBar.text!)!-1, section: 0), at: .middle, animated: true)
             
+            let asd = Int(searchBar.text!)
+            
+            if asd == nil{
+                
+                let alertController = UIAlertController(title: "Not a digital value", message: "You entered not a digital value. Try again.", preferredStyle: .alert)
+                
+                let alertAction = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
+                
+                alertController.addAction(alertAction)
+                self.present(alertController, animated: true, completion: nil)
+                return
+            }
+            
+            if Int(searchBar.text!)! > arrayOfNumbers.count{
+                
+                let alertController = UIAlertController(title: "Ooops..", message: "Something went wrong. We couldn't find this number", preferredStyle: .alert)
+                
+                let alertAction = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
+                
+                alertController.addAction(alertAction)
+                self.present(alertController, animated: true, completion: nil)
+                
+            } else {
+                tableView.scrollToRow(at: IndexPath(row: Int(searchBar.text!)!-1,
+                                                    section: 0), at: .middle, animated: true)
+            }
             return
         }
     }
     
-    //соеденяет searchbar и statusbar
     func position(for bar: UIBarPositioning) -> UIBarPosition {
         return .topAttached
     }
@@ -103,17 +129,11 @@ extension ViewController: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
         
         let cell = UITableViewCell(style: UITableViewCellStyle.subtitle, reuseIdentifier: "Title")
-        //let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath as IndexPath)
         let detailArray = arrayOfNumbers[indexPath.row]
         
         cell.textLabel?.text = detailArray.indexOfNumber
         cell.detailTextLabel?.text = detailArray.number
         return cell
-    }
-    
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
     }
     
 }
