@@ -17,26 +17,39 @@ class ViewController: UIViewController {
         var number : String
     }
     
+    let queue = DispatchQueue.global(qos: .utility)
+    let workerQueue = DispatchQueue(label: "com.bestkora.worker_concurrent", qos: .userInitiated, attributes: .concurrent)
+
+    
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     
     var hasSearch : Bool = false
-    
     var arrayOfNumbers = [SearchResult]()
+    var count = 1000000000
     
     func fibo(){
         var y : BigInt = 1
         var x : BigInt = 1
         
-        for index in 3...2000{
+        for index in 3...count{
             y = x + y
             x = y - x
             arrayOfNumbers.append(SearchResult(indexOfNumber: String(index), number: String(y)))
             //arrayOfNumbers = [SearchResult(indexOfNumber: String(index), number: String(y))]
+            
+        }
+        
+    }
+    
+    func reload(){
+        for _ in 1...count/100{
+            tableView.reloadData()
+            sleep(3)
         }
     }
     
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -50,7 +63,13 @@ class ViewController: UIViewController {
             SearchResult(indexOfNumber: "2", number: "1")
         ]
         
-        fibo()
+        workerQueue.async {
+            self.fibo()
+        }
+        workerQueue.async {
+            self.reload()
+        }
+        
     }
     
     override func didReceiveMemoryWarning() {
@@ -58,24 +77,24 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    
 }
 
 
 extension ViewController: UISearchBarDelegate {
-    
+
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         hasSearch = false
     }
     
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         hasSearch = false
+        searchBar.resignFirstResponder()
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         hasSearch = false
+        searchBar.resignFirstResponder()
     }
-    
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
@@ -84,14 +103,9 @@ extension ViewController: UISearchBarDelegate {
         if !searchBar.text!.isEmpty {
             
             let asd = Int(searchBar.text!)
-            
-            if asd! <= 0{
-                tableView.scrollToRow(at: [0 , 0], at: .middle, animated: true)
-                return
-            }
-            
+
             if asd == nil{
-                
+        
                 let alertController = UIAlertController(title: "Not a digital value", message: "You entered not a digital value. Try again.", preferredStyle: .alert)
                 
                 let alertAction = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
@@ -101,9 +115,14 @@ extension ViewController: UISearchBarDelegate {
                 return
             }
             
-            if Int(searchBar.text!)! > arrayOfNumbers.count{
+            if asd! <= 0{
+                tableView.scrollToRow(at: [0 , 0], at: .middle, animated: true)
+                return
+            }
+            
+            if Int(searchBar.text!)!-1 > arrayOfNumbers.count{
                 
-                let alertController = UIAlertController(title: "Ooops..", message: "Something went wrong. We couldn't find this number", preferredStyle: .alert)
+                let alertController = UIAlertController(title: "Ooops..", message: "We didnt find this number yet", preferredStyle: .alert)
                 
                 let alertAction = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
                 
@@ -138,6 +157,7 @@ extension ViewController: UITableViewDataSource {
         
         cell.textLabel?.text = detailArray.indexOfNumber
         cell.detailTextLabel?.text = detailArray.number
+        
         return cell
     }
     
