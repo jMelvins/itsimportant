@@ -6,7 +6,6 @@
 //  Copyright © 2017 Vladislav Shilov. All rights reserved.
 //
 
-
 import UIKit
 import BigInt
 
@@ -38,7 +37,6 @@ class ViewController: UIViewController {
 //            
 //        }
 //    }
-
     func fibo(){
         var a11: BigInt = 1;     var a12 : BigInt = 1
         var a21: BigInt = 1;     var a22 : BigInt = 0
@@ -59,12 +57,16 @@ class ViewController: UIViewController {
             a11 = c11; a12 = c12; a21 = c21; a22 = c22
             
             arrayOfNumbers.append(SearchResult(indexOfNumber: String(index), number: String(a11)))
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
         }
     }
-
+    
+    
+    func reload(){
+        for _ in 1...count/100{
+            tableView.reloadData()
+            sleep(3)
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -81,6 +83,10 @@ class ViewController: UIViewController {
         
         workerQueue.async {
             self.fibo()
+        }
+        
+        workerQueue.async {
+            self.reload()
         }
         
     }
