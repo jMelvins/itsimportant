@@ -17,30 +17,51 @@ class ViewController: UIViewController {
         var number : String
     }
     
-    let queue = DispatchQueue.global(qos: .utility)
-    let workerQueue = DispatchQueue(label: "com.bestkora.worker_concurrent", qos: .userInitiated, attributes: .concurrent)
-
+    let workerQueue = DispatchQueue(label: "com.fib.worker_concurrent", qos: .userInitiated, attributes: .concurrent)
     
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     
     var hasSearch : Bool = false
     var arrayOfNumbers = [SearchResult]()
-    var count = 1000000000
+    var count = 1000000000000000000
     
+
+//    func fibo(){
+//        for index in 3...count{
+//            var y : BigInt = 1
+//            var x : BigInt = 1
+//            y = x + y
+//            x = y - x
+//            arrayOfNumbers.append(SearchResult(indexOfNumber: String(index), number: String(y)))
+//            //arrayOfNumbers = [SearchResult(indexOfNumber: String(index), number: String(y))]
+//            
+//        }
+//    }
+
     func fibo(){
-        var y : BigInt = 1
-        var x : BigInt = 1
+        var a11: BigInt = 1;     var a12 : BigInt = 1
+        var a21: BigInt = 1;     var a22 : BigInt = 0
+        
+        let b11: BigInt = 1;     let b12 : BigInt = 1
+        let b21: BigInt = 1;     let b22 : BigInt = 0
+        
+        var c11: BigInt = 1;     var c12 : BigInt = 1
+        var c21: BigInt = 1;     var c22 : BigInt = 0
         
         for index in 3...count{
-            y = x + y
-            x = y - x
-            arrayOfNumbers.append(SearchResult(indexOfNumber: String(index), number: String(y)))
-            //arrayOfNumbers = [SearchResult(indexOfNumber: String(index), number: String(y))]
             
-        }
+            c11 = b11*a11 + b12*a21
+            c12 = b11*a12 + b12*a22
+            c21 = b21*a11 + b22*a21
+            c22 = b21*a12 + b22*a22
         
+            a11 = c11; a12 = c12; a21 = c21; a22 = c22
+            
+            arrayOfNumbers.append(SearchResult(indexOfNumber: String(index), number: String(a11)))
+        }
     }
+    
     
     func reload(){
         for _ in 1...count/100{
@@ -48,7 +69,6 @@ class ViewController: UIViewController {
             sleep(3)
         }
     }
-    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,6 +86,7 @@ class ViewController: UIViewController {
         workerQueue.async {
             self.fibo()
         }
+        
         workerQueue.async {
             self.reload()
         }
@@ -82,19 +103,6 @@ class ViewController: UIViewController {
 
 extension ViewController: UISearchBarDelegate {
 
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        hasSearch = false
-    }
-    
-    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-        hasSearch = false
-        searchBar.resignFirstResponder()
-    }
-    
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        hasSearch = false
-        searchBar.resignFirstResponder()
-    }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
@@ -133,6 +141,8 @@ extension ViewController: UISearchBarDelegate {
                 tableView.scrollToRow(at: IndexPath(row: Int(searchBar.text!)!-1,
                                                     section: 0), at: .middle, animated: true)
             }
+            
+            searchBar.text = ""
             return
         }
     }
