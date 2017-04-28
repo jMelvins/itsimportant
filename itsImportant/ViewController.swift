@@ -5,7 +5,6 @@
 //  Created by Vladislav Shilov on 17.04.17.
 //  Copyright © 2017 Vladislav Shilov. All rights reserved.
 //
-
 import UIKit
 import BigInt
 
@@ -24,50 +23,8 @@ class ViewController: UIViewController {
     var hasSearch : Bool = false
     var arrayOfNumbers = [SearchResult]()
     var count = 1000000000000000000
+ 
     
-
-//    func fibo(){
-//        for index in 3...count{
-//            var y : BigInt = 1
-//            var x : BigInt = 1
-//            y = x + y
-//            x = y - x
-//            arrayOfNumbers.append(SearchResult(indexOfNumber: String(index), number: String(y)))
-//            //arrayOfNumbers = [SearchResult(indexOfNumber: String(index), number: String(y))]
-//            
-//        }
-//    }
-    func fibo(){
-        var a11: BigInt = 1;     var a12 : BigInt = 1
-        var a21: BigInt = 1;     var a22 : BigInt = 0
-        
-        let b11: BigInt = 1;     let b12 : BigInt = 1
-        let b21: BigInt = 1;     let b22 : BigInt = 0
-        
-        var c11: BigInt = 1;     var c12 : BigInt = 1
-        var c21: BigInt = 1;     var c22 : BigInt = 0
-        
-        for index in 3...count{
-            
-            c11 = b11*a11 + b12*a21
-            c12 = b11*a12 + b12*a22
-            c21 = b21*a11 + b22*a21
-            c22 = b21*a12 + b22*a22
-        
-            a11 = c11; a12 = c12; a21 = c21; a22 = c22
-            
-            arrayOfNumbers.append(SearchResult(indexOfNumber: String(index), number: String(a11)))
-        }
-    }
-    
-    
-    func reload(){
-        for _ in 1...count/100{
-            tableView.reloadData()
-            sleep(3)
-        }
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -82,11 +39,29 @@ class ViewController: UIViewController {
         ]
         
         workerQueue.async {
-            self.fibo()
-        }
-        
-        workerQueue.async {
-            self.reload()
+            var a11: BigInt = 1;     var a12 : BigInt = 1
+            var a21: BigInt = 1;     var a22 : BigInt = 0
+            
+            let b11: BigInt = 1;     let b12 : BigInt = 1
+            let b21: BigInt = 1;     let b22 : BigInt = 0
+            
+            var c11: BigInt = 1;     var c12 : BigInt = 1
+            var c21: BigInt = 1;     var c22 : BigInt = 0
+            
+            for index in 3...self.count{
+                
+                c11 = b11*a11 + b12*a21
+                c12 = b11*a12 + b12*a22
+                c21 = b21*a11 + b22*a21
+                c22 = b21*a12 + b22*a22
+                
+                a11 = c11; a12 = c12; a21 = c21; a22 = c22
+                
+                self.arrayOfNumbers.append(SearchResult(indexOfNumber: String(index), number: String(a11)))
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            }
         }
         
     }
@@ -100,18 +75,16 @@ class ViewController: UIViewController {
 
 
 extension ViewController: UISearchBarDelegate {
-
+    
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
         searchBar.resignFirstResponder()
-    
+        
         if !searchBar.text!.isEmpty {
             
-            let asd = Int(searchBar.text!)
-
-            if asd == nil{
-        
+            if Int(searchBar.text!) == nil{
+                
                 let alertController = UIAlertController(title: "Not a digital value", message: "You entered not a digital value. Try again.", preferredStyle: .alert)
                 
                 let alertAction = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
@@ -121,7 +94,7 @@ extension ViewController: UISearchBarDelegate {
                 return
             }
             
-            if asd! <= 0{
+            if Int(searchBar.text!)! <= 0{
                 tableView.scrollToRow(at: [0 , 0], at: .middle, animated: true)
                 return
             }
